@@ -1,0 +1,5 @@
+confluent-kafka
+pandas
+faker
+psycopg2-binary
+requests

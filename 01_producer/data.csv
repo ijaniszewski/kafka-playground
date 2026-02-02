@@ -1,0 +1,10 @@
+user_id,page_id,action,timestamp
+101,home,view,1678886400
+102,products,view,1678886405
+101,products,view,1678886410
+103,home,view,1678886412
+102,cart,add,1678886420
+101,cart,add,1678886425
+104,home,view,1678886430
+102,checkout,purchase,1678886440
+101,checkout,purchase,1678886445
