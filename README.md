@@ -25,9 +25,6 @@ kafka-playground/
 ├── 03_ksqldb/                # Scenario 3: Real-time Stream Processing
 │   ├── queries.sql          # SQL queries for ksqlDB streams
 │   └── README.md            # Tutorial guide
-└── common/                   # Shared resources
-    └── ksql/                # ksqlDB queries for stream processing
-        └── queries.sql
 ```
 
 ## Architecture
