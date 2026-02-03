@@ -2,6 +2,8 @@
 
 This section demonstrates Change Data Capture with Debezium - capturing database changes and streaming them to Kafka in real-time.
 
+> 📖 **Read the Article**: [CDC Explained: Streaming Database Changes with Kafka and Debezium](https://ijaniszewski.medium.com/cdc-explained-streaming-database-changes-with-kafka-and-debezium-cff3e03afae7?postPublishedType=initial)
+
 ## Files
 
 - **setup.py** - One-command setup: creates database, registers connector, checks status

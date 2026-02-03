@@ -2,6 +2,13 @@
 
 An educational project demonstrating Change Data Capture (CDC) patterns with Apache Kafka, featuring two main scenarios: basic stream processing and database CDC with Debezium.
 
+## Articles Series
+
+This repository accompanies a series of articles on Data Engineering with Kafka:
+
+1.  [CDC Explained: Streaming Database Changes with Kafka and Debezium](https://ijaniszewski.medium.com/cdc-explained-streaming-database-changes-with-kafka-and-debezium-cff3e03afae7?postPublishedType=initial)
+2.  [Query Streams Explained: Transforming Kafka Data in Real-Time with ksqlDB](https://ijaniszewski.medium.com/query-streams-explained-transforming-kafka-data-in-real-time-with-ksqldb-4002ff3c5239)
+
 ## Project Structure
 
 ```
@@ -12,10 +19,12 @@ kafka-playground/
 │   ├── producer.py           # Streams events from CSV to Kafka
 │   └── data.csv              # Sample user action data
 ├── 02_cdc/                   # Scenario 2: Change Data Capture
-│   ├── setup_postgres.py    # Initialize database and table
-│   ├── register_connector.py # Register Debezium CDC connector
+│   ├── setup.py             # Setup logic for CDC
 │   ├── consumer_cdc.py      # Consume CDC events from Kafka
-│   └── insert_data.py       # Generate test data changes
+│   └── generate_data.py     # Generate test data changes
+├── 03_ksqldb/                # Scenario 3: Real-time Stream Processing
+│   ├── queries.sql          # SQL queries for ksqlDB streams
+│   └── README.md            # Tutorial guide
 └── common/                   # Shared resources
     └── ksql/                # ksqlDB queries for stream processing
         └── queries.sql
