@@ -1,6 +1,6 @@
 # 04 - Game Analytics: Data Model Design (Q1)
 
-## 🎮 Business Scenario
+## Business Scenario
 
 **Crystal Quest** - A puzzle-solving mobile game. We have two event streams in Kafka:
 
@@ -14,7 +14,7 @@
 
 ---
 
-## 📊 Data Model Design - Star Schema
+## Data Model Design - Star Schema
 
 ### Grain
 
@@ -23,7 +23,7 @@
    - Tracks engagement metrics (levels played, ads watched, duration)
    
 2. **`fact_purchase`** - **1 row per transaction**
-   - ⚠️ **IMPORTANT**: Refund is a separate row with the same `purchase_id`, but `is_refund = TRUE`
+   - **IMPORTANT**: Refund is a separate row with the same `purchase_id`, but `is_refund = TRUE`
    - Enables "gross revenue" vs "net revenue" analysis
 
 #### Dimension Tables
@@ -58,7 +58,7 @@
 
 ---
 
-## 🗂️ File Structure
+## File Structure
 
 ```
 04_game_analytics/
@@ -180,7 +180,7 @@ The consumer will:
 
 ---
 
-## 🔍 Verify Data
+## Verify Data
 
 ### Check Kafka Topics
 ```bash
@@ -259,16 +259,16 @@ Advanced ETL/ELT implementation:
 
 ---
 
-## 🧪 Testowanie Scenariuszy
+## Testing Scenarios
 
-### Scenariusz 1: Device Change (SCD Type 2)
-Użytkownik `u_100001` zmienia telefon w połowie symulacji (Android → iOS).
+### Scenario 1: Device Change (SCD Type 2)
+User `u_100001` changes phone in the middle of the simulation (Android -> iOS).
 
-**Co testujemy**:
-- Czy `dim_user` ma dwa wiersze dla tego samego `user_id`?
-- Czy zakupy są linkowane do prawidłowej wersji profilu (po `effective_start_date`)?
+**What we're testing**:
+- Does `dim_user` contain two rows for the same `user_id`?
+- Are purchases linked to the correct profile version (after `effective_start_date`)?
 
-**Zapytanie testowe**:
+**Test query**:
 ```sql
 SELECT user_id, device_sk, effective_start_date, effective_end_date, is_current
 FROM dim_user
@@ -276,14 +276,14 @@ WHERE user_id = 'u_100001'
 ORDER BY effective_start_date;
 ```
 
-### Scenariusz 2: Refunds
-~3% transakcji jest zwracanych (po 5 min - 24h od zakupu).
+### Scenario 2: Refunds
+~3% of transactions are refunded (5 min - 24h after purchase).
 
-**Co testujemy**:
-- Czy mamy 2 wiersze w `fact_purchase` (oryginał + refund)?
-- Czy `is_refund` flag działa poprawnie?
+**What we're testing**:
+- Do we have 2 rows in `fact_purchase` (original + refund)?
+- Does the `is_refund` flag work correctly?
 
-**Zapytanie testowe**:
+**Test query**:
 ```sql
 SELECT purchase_id, transaction_ts, amount_usd, is_refund
 FROM fact_purchase
@@ -293,10 +293,10 @@ WHERE purchase_id IN (
 ORDER BY purchase_id, transaction_ts;
 ```
 
-### Scenariusz 3: Revenue per Session
-**Kluczowe pytanie biznesowe**: Która sesja przyniosła najwięcej przychodów?
+### Scenario 3: Revenue per Session
+**Key business question**: Which session generated the most revenue?
 
-**Zapytanie**:
+**Query**:
 ```sql
 SELECT * FROM v_session_with_revenue
 WHERE session_revenue_usd > 0
@@ -314,14 +314,14 @@ Design Patterns Used
 
 ---
 
-## ⚠️ Common Pitfalls
+## Common Pitfalls
 
 1. **Refunds in Revenue Queries**
    ```sql
-   -- ❌ WRONG (counts refunds as revenue)
+   -- WRONG (counts refunds as revenue)
    SELECT SUM(amount_usd) FROM fact_purchase;
    
-   -- ✅ CORRECT (net revenue)
+   -- CORRECT (net revenue)
    SELECT SUM(CASE WHEN is_refund THEN -amount_usd ELSE amount_usd END)
    FROM fact_purchase
    WHERE NOT is_sandbox;
@@ -329,7 +329,7 @@ Design Patterns Used
 
 2. **SCD Type 2 Joins**
    ```sql
-   -- ✅ CORRECT (join with snapshot timestamp)
+   -- CORRECT (join with snapshot timestamp)
    SELECT u.* FROM dim_user u
    JOIN fact_purchase p ON p.user_sk = u.user_sk
    WHERE u.effective_start_date <= p.transaction_ts
@@ -348,7 +348,7 @@ Design Patterns Used
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 ```
 ┌─────────────────┐
@@ -398,7 +398,7 @@ Design Patterns Used
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Kimball Dimensional Modeling](https://www.kimballgroup.com/)
 - [Kafka Streams Windowing](https://kafka.apache.org/documentation/streams/)
@@ -409,29 +409,4 @@ Design Patterns Used
 
 **Author**: Created as a data engineering interview challenge simulation  
 **Date**: 2026-02-07  
-**TaskType 2 Joins**
-   ```sql
-   -- ✅ DOBRE (join z snapshot timestamp)
-   SELECT u.* FROM dim_user u
-   JOIN fact_purchase p ON p.user_sk = u.user_sk
-   WHERE u.effective_start_date <= p.transaction_ts
-     AND (u.effective_end_date IS NULL OR u.effective_end_date > p.transaction_ts);
-   ```
-
-3. **Late-Arriving Purchases**
-   - Zakup może przyjść po zamknięciu sesji
-   - Trzeba zrobić backfill `fact_purchase.session_sk`
-
----
-
-## 📚 Dodatkowe Zasoby
-
-- [Kimball Dimensional Modeling](https://www.kimballgroup.com/)
-- [Kafka Streams Windowing](https://kafka.apache.org/documentation/streams/)
-- [SCD Type 2 Best Practices](https://en.wikipedia.org/wiki/Slowly_changing_dimension)
-
----
-
-**Autor**: Gignac  
-**Data**: 2026-02-07  
-**Zadanie**: Q1 - Data Model Design (Mobile Game Analytics)
+**Task**: Q1 - Data Model Design (Mobile Game Analytics)
