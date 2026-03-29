@@ -1,5 +1,7 @@
 # 04 - Game Analytics: Data Model Design (Q1)
 
+> Read the Article: [Real-Time Game Analytics: Building a Star Schema Data Warehouse with Kafka](https://ijaniszewski.medium.com/real-time-game-analytics-building-a-star-schema-data-warehouse-with-kafka-a413f8bc556d)
+
 ## Business Scenario
 
 **Crystal Quest** - A puzzle-solving mobile game. We have two event streams in Kafka:
